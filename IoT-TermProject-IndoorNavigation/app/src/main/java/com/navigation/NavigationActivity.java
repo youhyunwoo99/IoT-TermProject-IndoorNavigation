@@ -40,15 +40,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class NavigationActivity extends AppCompatActivity implements AccelerometerDistanceCalculator.OnDistanceChangedListener {
+public class NavigationActivity extends AppCompatActivity {
     private String dest;
     private TextView dest_tv;
-    private TextView remainDistance;
+    private TextView remainDistance_tv;
+    private TextView myLocation_tv;
+    private TextView title;
     private String serverAddress = "";
     private String URL = "";
+    private String myLocation = "";
     private WifiManager wifiManager;
     private String scanLog;
     private boolean scanFlag = false;
+
+    private List<Double> distanceList = new ArrayList<>();
+    private List<String> pathList = new ArrayList<>();
+    private List<Integer> directionList = new ArrayList<>();
+
     JSONObject one_wifi_json = new JSONObject();
     JSONObject result_json = new JSONObject();
     @Override
@@ -56,17 +64,24 @@ public class NavigationActivity extends AppCompatActivity implements Acceleromet
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
         dest_tv = findViewById(R.id.destination_desc);
+        remainDistance_tv = findViewById(R.id.remain_distance);
+        myLocation_tv = findViewById(R.id.current_location_desc);
+        title = findViewById(R.id.project_title);
+
         dest = getIntent().getStringExtra("dest");
         dest_tv.setText(dest);
+        myLocation = getIntent().getStringExtra("start");
+        myLocation_tv.setText(myLocation);
+
+
         String infoString = getIntent().getStringExtra("info");
         setStringToJson(infoString);
 
-        remainDistance = findViewById(R.id.remain_distance);
+
         URL = serverAddress + "/findPosition";
         Log.d("test12", URL);
-
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-       // scanWiFiInfo();
+        scanWiFiInfo();
 
     }
 
@@ -81,17 +96,12 @@ public class NavigationActivity extends AppCompatActivity implements Acceleromet
             JSONArray directionArray = jsonObject.getJSONArray("direction");
 
             // Convert them to Java arrays or arraylists
-            List<Double> distanceList = new ArrayList<>();
             for (int i = 0; i < distanceArray.length(); i++) {
                 distanceList.add(distanceArray.getDouble(i));
             }
-
-            List<String> pathList = new ArrayList<>();
             for (int i = 0; i < pathArray.length(); i++) {
                 pathList.add(pathArray.getString(i));
             }
-
-            List<Integer> directionList = new ArrayList<>();
             for (int i = 0; i < directionArray.length(); i++) {
                 directionList.add(directionArray.getInt(i));
             }
@@ -99,17 +109,13 @@ public class NavigationActivity extends AppCompatActivity implements Acceleromet
             Log.d("stringToJson", pathList.toString());
             Log.d("stringToJson", directionList.toString());
             // Now distanceList, pathList, and directionList hold the parsed data
+            title.setText(pathList.toString());
+
 
         } catch (JSONException e) {
             // This is the line where if your jsonString is not a valid JSON format, an error will be thrown
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void onDistanceChanged(double distance) {
-        Log.d("accel", String.valueOf(distance));
-        remainDistance.setText(distance + "m");
     }
 
     private void scanWiFiInfo() {
@@ -123,30 +129,24 @@ public class NavigationActivity extends AppCompatActivity implements Acceleromet
             if (ActivityCompat.checkSelfPermission(NavigationActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
                 return;
             }
+            Log.d("BroadcastReceiver", "Find url: "+URL);
+
             List<ScanResult> scanResultList = wifiManager.getScanResults();
             unregisterReceiver(this);
 
             scanResultList.sort((s1, s2) -> s2.level - s1.level);
 
-
             scanLog = "";
             for (ScanResult scanResult : scanResultList) {
                 scanLog += "BSSID: " + scanResult.BSSID + "  level: " + scanResult.level + "\n";
-
-                //scanLog += scanResult.toString()+ "\n";
             }
-
             scanFlag = true;
 
             // 서버 통신을 별도의 쓰레드에서 처리
             new Thread(() -> {
+                Log.d("BroadcastReceiverThread", "Find url: "+URL);
 
                 // 서버에 보낼 JSON 설정 부분
                 JSONArray json_array = new JSONArray();
@@ -164,7 +164,9 @@ public class NavigationActivity extends AppCompatActivity implements Acceleromet
                     json_array.put(one_wifi_json);
                 }
                 try {
+                    result_json.put("position", "");
                     result_json.put("wifi_data", json_array);
+                    Log.d("BroadCastReceiver", "Find json array :"+json_array);
                     result_json.put("password", "asdfgh");
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -175,11 +177,22 @@ public class NavigationActivity extends AppCompatActivity implements Acceleromet
                     RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
                     String mRequestBody = result_json.toString(); // json 을 통신으로 보내기위해 문자열로 변환하는 부분
 
-                    Log.d("제발", URL + mRequestBody);
+                    Log.d("BroadCastReceiver", "Find url, mRequestBody : " +URL + mRequestBody);
                     StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, response -> {
                         String position = response.split("\"")[3];
-
+                        if(position.length() == 3) {
+                            position += "호";
+                        }
+                        myLocation_tv.setText(position);
+                        Log.d("BroadCastReceiver", "Find start location : " + position);
+                        if(position == dest) {
+                            //TODO 도착
+                        } else {
+                            scanWiFiInfo();
+                        }
                     }, error -> {
+                        Log.d("BroadCastReceiver", "Find error : "+error.toString());
+
                     }) {
                         @Override
                         public String getBodyContentType() {
@@ -205,9 +218,6 @@ public class NavigationActivity extends AppCompatActivity implements Acceleromet
                     e.printStackTrace();
                 }
             }).start();
-
-
-
         }
     };
 

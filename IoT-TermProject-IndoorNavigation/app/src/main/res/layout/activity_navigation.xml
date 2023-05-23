@@ -8,7 +8,7 @@
     tools:context="com.navigation.NavigationActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/project_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -27,7 +27,7 @@
         android:elevation="10dp"
         android:background="@drawable/round_button"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
+        app:layout_constraintTop_toBottomOf="@+id/project_title">
 
         <ImageView
             android:id="@+id/direction"
@@ -45,10 +45,11 @@
             android:id="@+id/remain_distance_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="다음 경로까지 :"
+            android:text="To Next Path :"
             android:textColor="@color/white"
             android:textSize="32sp"
             android:textStyle="bold"
+            android:layout_marginTop="16dp"
             android:layout_marginStart="36dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/direction" />
@@ -72,9 +73,9 @@
             android:layout_marginStart="36dp"
             android:layout_marginTop="24dp"
             android:background="@drawable/activity_navigation_tv_border"
-            android:text="목적지"
+            android:text="Destination"
             android:textColor="#8A8A8A"
-            android:textSize="24sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             android:gravity="center"
             android:layout_marginBottom="16dp"
@@ -104,7 +105,7 @@
             android:layout_height="40dp"
             android:background="@drawable/activity_navigation_tv_border"
             android:gravity="center"
-            android:text="현재 내 위치"
+            android:text="Current Location"
             android:textColor="#8A8A8A"
             android:textSize="24sp"
             android:textStyle="bold"
