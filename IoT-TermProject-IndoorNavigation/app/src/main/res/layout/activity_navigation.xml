@@ -42,30 +42,18 @@
             tools:layout_editor_absoluteX="24dp" />
 
         <TextView
-            android:id="@+id/remain_distance_title"
+            android:id="@+id/remain_distance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:text="To Next Path :"
             android:textColor="@color/white"
             android:textSize="32sp"
             android:textStyle="bold"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="36dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/direction" />
 
-        <TextView
-            android:id="@+id/remain_distance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="5m"
-            android:textColor="@color/white"
-            android:textSize="32sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/remain_distance_title"
-            app:layout_constraintStart_toEndOf="@id/remain_distance_title"
-            app:layout_constraintTop_toTopOf="@+id/remain_distance_title" />
         <TextView
             android:id="@+id/destination_title"
             android:layout_width="100dp"

@@ -8,19 +8,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -29,7 +23,6 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.navigation.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,7 +31,6 @@ import org.json.JSONObject;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class NavigationActivity extends AppCompatActivity {
     private String dest;
@@ -46,12 +38,14 @@ public class NavigationActivity extends AppCompatActivity {
     private TextView remainDistance_tv;
     private TextView myLocation_tv;
     private TextView title;
-    private String serverAddress = "";
+    private String serverAddress = "http://172.16.235.36:8006";
     private String URL = "";
     private String myLocation = "";
+    private int currentIndex = -1;
     private WifiManager wifiManager;
     private String scanLog;
     private boolean scanFlag = false;
+    private static String remainTitle = "To Next Path : ";
 
     private List<Double> distanceList = new ArrayList<>();
     private List<String> pathList = new ArrayList<>();
@@ -187,8 +181,19 @@ public class NavigationActivity extends AppCompatActivity {
                         Log.d("BroadCastReceiver", "Find start location : " + position);
                         if(position == dest) {
                             //TODO 도착
+                            remainDistance_tv.setText("Arrive!");
+                            myLocation_tv.setText(position);
                         } else {
-                            scanWiFiInfo();
+                            if (pathList.contains(position)) {
+                                // 현재 위치 인덱스
+                                currentIndex = pathList.indexOf(position);
+                                remainDistance_tv.setText(remainTitle + distanceList.get(currentIndex));
+                                myLocation_tv.setText(position);
+                                //TODO 방향
+                                scanWiFiInfo();
+                            } else {
+                                Toast.makeText(context, "It's out of path", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }, error -> {
                         Log.d("BroadCastReceiver", "Find error : "+error.toString());
