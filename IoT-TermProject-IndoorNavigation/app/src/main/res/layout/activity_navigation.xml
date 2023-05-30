@@ -4,6 +4,122 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.indoorNavigation.NavigationActivity">
+    android:background="#FDFDFD"
+    tools:context="com.navigation.NavigationActivity">
 
+    <TextView
+        android:id="@+id/project_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Project Title"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="24dp"
+        android:elevation="10dp"
+        android:background="@drawable/round_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/project_title">
+
+        <ImageView
+            android:id="@+id/direction"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="36dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginEnd="36dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/arrow_up_bold"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="24dp" />
+
+        <TextView
+            android:id="@+id/remain_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="To Next Path :"
+            android:textColor="@color/white"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/direction" />
+
+        <TextView
+            android:id="@+id/destination_title"
+            android:layout_width="100dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/activity_navigation_tv_border"
+            android:text="Destination"
+            android:textColor="#8A8A8A"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/current_location_title"/>
+
+        <TextView
+            android:id="@+id/destination_desc"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="36dp"
+            android:background="@drawable/activity_navigation_tv_border"
+            android:text="~~"
+            android:textColor="#8A8A8A"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/destination_title"
+            app:layout_constraintTop_toTopOf="@id/destination_title"
+            app:layout_constraintBottom_toBottomOf="@id/destination_title"/>
+
+        <TextView
+            android:id="@+id/current_location_title"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:background="@drawable/activity_navigation_tv_border"
+            android:gravity="center"
+            android:text="Current Location"
+            android:textColor="#8A8A8A"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginEnd="36dp"
+            app:layout_constraintBottom_toTopOf="@id/current_location_desc"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/current_location_desc"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginEnd="36dp"
+            android:layout_marginBottom="24dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/activity_navigation_tv_border"
+            android:gravity="center"
+            android:text="~~~"
+            android:textColor="#8A8A8A"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
