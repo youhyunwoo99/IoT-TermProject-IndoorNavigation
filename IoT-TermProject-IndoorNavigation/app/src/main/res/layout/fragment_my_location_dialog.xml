@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <TextView
         android:id="@+id/location_title"
-        android:text="Are you here now?"
+        android:text="현재 이 위치에 계신가요?"
         android:textSize="24sp"
         android:textColor="@color/black"
         android:layout_width="wrap_content"
@@ -18,7 +18,7 @@
 
     <TextView
         android:id="@+id/location"
-        android:text="301호"
+        android:text="호"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"

@@ -1,19 +1,15 @@
 package com.navigation;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.fragment.app.DialogFragment;
-
-import org.w3c.dom.Text;
 
 public class MyLocationDialogFragment extends DialogFragment {
     private String location;
@@ -30,12 +26,12 @@ public class MyLocationDialogFragment extends DialogFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my_location_dialog, container, false);
         Button yesBtn = view.findViewById(R.id.btn_yes);
         Button noBtn = view.findViewById(R.id.btn_no);
         location_tv = view.findViewById(R.id.location);
+        location_tv.setText(location);
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         yesBtn.setOnClickListener(new View.OnClickListener() {
