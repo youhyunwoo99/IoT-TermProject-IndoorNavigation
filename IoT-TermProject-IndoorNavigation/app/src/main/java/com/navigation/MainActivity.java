@@ -41,18 +41,15 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements MyLocationDialogFragment.MyLocationDialogListener {
     private Spinner spinner;
     private Button btn;
-    private Button btn2;
-
+    LoadingDialog loadingDialog = new LoadingDialog();
     private String spinnerInput;
-    private static String serverAddress = "http://172.16.235.36:8006";
+    private static String serverAddress = "http://172.16.234.164:8006";
     private String URL;
     private WifiManager wifiManager;
 
     String scanLog;
 
     String start;
-
-
 
     private int mode = 0;
 
@@ -86,28 +83,37 @@ public class MainActivity extends AppCompatActivity implements MyLocationDialogF
         }
         btn = findViewById(R.id.button);
         btn.setOnClickListener(v -> {
+            loadingDialog.show(getFragmentManager(), "loading");
             URL = serverAddress +"/findPosition";
             wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             Log.d("our wifi", "d");
             scanWiFiInfo();
-            MyLocationDialogFragment dialog = new MyLocationDialogFragment(start, MainActivity.this);
-            dialog.show(getSupportFragmentManager(), "MyLocationDialogFragment");
 
         });
     }
     private void setSpinner() {
         // Spinner Drop down elements
         List<String> locations = new ArrayList<String>();
-        locations.add("413호");
-        locations.add("431호");
-        locations.add("428호");
-        locations.add("4층 아르테크네");
-        locations.add("435호");
+
         locations.add("414호");
-        locations.add("420호");
-        locations.add("504호");
-        locations.add("531호");
-        locations.add("520호");
+        locations.add("4층 제 2 엘리베이터 2호");
+        locations.add("4층 테라스");
+        locations.add("4층 아르테크네");
+        locations.add("406호");
+        locations.add("407호");
+        locations.add("4층 제 3 엘리베이터 1호");
+        locations.add("413호");
+        locations.add("4층 제 4 계단");
+
+        locations.add("5층 제 2 엘리베이터 1호");
+        locations.add("5층 큐브 입구 1");
+        locations.add("5층 큐브 입구 2");
+        locations.add("506호");
+        locations.add("508호");
+        locations.add("510호");
+        locations.add("5층 제 3 엘리베이터 1호");
+        locations.add("513호");
+        locations.add("5층 제 1 엘리베이터");
 
         // Creating adapter for spinner
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, locations);
@@ -150,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements MyLocationDialogF
             // 서버에 보낼 JSON 설정 부분
 //            JSONArray json_array = new JSONArray();
             try {
+                //result_json.put("start", start);
                 result_json.put("start", start);
                 result_json.put("end", spinner.getSelectedItem());
             } catch (JSONException e) {
@@ -171,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements MyLocationDialogF
                             .putExtra("dest", spinnerInput)
                             .putExtra("info", response)
                             .putExtra("start", start));
-                    Toast.makeText(this, "Selected: " + spinnerInput, Toast.LENGTH_SHORT).show();
+                            //.putExtra("start", start));
 
                 }, error -> {
                     Log.d("getDijkstraPath", "Dijkstra url, mRequestBody :"+error.toString());
@@ -266,10 +273,9 @@ public class MainActivity extends AppCompatActivity implements MyLocationDialogF
                         if(position.length() == 3) {
                             start += "호";
                         }
-                        btn2.setText(start);
                         Log.d("BroadCastReceiver", "Find start location : " + start);
-
                         MyLocationDialogFragment dialog = new MyLocationDialogFragment(start, MainActivity.this);
+                        loadingDialog.dismiss();
                         dialog.show(getSupportFragmentManager(), "MyLocationDialogFragment");
 
                     }, error -> {
