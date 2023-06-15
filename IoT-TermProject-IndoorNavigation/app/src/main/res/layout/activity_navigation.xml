@@ -37,7 +37,7 @@
         app:layout_constraintEnd_toEndOf="@id/textureView"
         app:layout_constraintStart_toStartOf="@id/textureView"
         app:layout_constraintBottom_toBottomOf="@id/textureView"
-        app:tint="#004E96" />
+        app:tint="#E45E5E" />
 
     <ImageView
         android:id="@+id/my_direction"
