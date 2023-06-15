@@ -53,6 +53,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class NavigationActivity extends AppCompatActivity implements SensorEventListener {
+    private Boolean arriveFlag = false;
     private String dest;
     private TextView dest_tv;
     private TextView nextPath_tv;
@@ -281,6 +282,7 @@ public class NavigationActivity extends AppCompatActivity implements SensorEvent
         super.onPause();
         sensorManager.unregisterListener(this, accelerometer);
         sensorManager.unregisterListener(this, magnetometer);
+        unregisterReceiver(wifiReceiver);
     }
     private float[] lowPassFilter( float input[], float output[] ) {
         if ( output == null ) return input;
@@ -340,7 +342,6 @@ public class NavigationActivity extends AppCompatActivity implements SensorEvent
             Log.d("BroadcastReceiver", "Find url: "+URL);
 
             List<ScanResult> scanResultList = wifiManager.getScanResults();
-            unregisterReceiver(this);
 
             scanResultList.sort((s1, s2) -> s2.level - s1.level);
 
@@ -394,7 +395,8 @@ public class NavigationActivity extends AppCompatActivity implements SensorEvent
                         Log.d("BroadCastReceiver", "Find start location : " + position);
                         Log.d("positionAndDest", position + dest);
                         Log.d("positionAndDest", String.valueOf(position.equals(dest)));
-                        if(position.equals(dest)) {
+                        if(position.equals(dest) && !arriveFlag) {
+                            arriveFlag = true;
                             Log.d("arrive", position);
                             totalRemainDistance_tv.setText("목적지에 도착했습니다!");
                             remainDistance_tv.setText("목적지에 도착했습니다!");
